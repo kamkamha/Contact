@@ -5,8 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import my.edu.tarc.contact.databinding.FragmentFirstBinding
+import my.tarc.mycontact.ContactAdapter
+import my.tarc.mycontact.ContactViewModel
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -18,7 +23,8 @@ class FirstFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
+    // refer to the view model
+    private val myContactViewModel:ContactViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,6 +37,23 @@ class FirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //create an instance of Adapter
+        val adapter = ContactAdapter()
+
+        //insert an observer
+        myContactViewModel.contactList.observe(
+            viewLifecycleOwner, Observer {
+                if(it.isEmpty()){
+                    binding.textViewCount.text = getString(R.string.no_record)
+                }
+                else{
+                    binding.textViewCount.isVisible = false
+                    adapter.setContact(it)
+                }
+            }
+        )
+        binding.recyclerView.adapter=adapter
     }
 
     override fun onDestroyView() {

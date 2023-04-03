@@ -11,20 +11,25 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.NonCancellable.cancel
 import my.edu.tarc.contact.databinding.ActivityMainBinding
+import my.tarc.mycontact.ContactViewModel
 import java.lang.System.exit
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-
+    private lateinit var contactViewModel: ContactViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //initialize the view model
+        contactViewModel = ViewModelProvider(this).get(ContactViewModel::class.java)
 
         setSupportActionBar(binding.toolbar)
 
